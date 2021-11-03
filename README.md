@@ -39,3 +39,7 @@ LOGOUT
 
 authSlice
 authSaga
+
+
+STUDENT
+

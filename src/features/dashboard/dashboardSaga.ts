@@ -50,6 +50,7 @@ function* fetchRankingByCityList() {
     const responseList: Array<ListResponse<Student>> = yield all(callList);
     const rankingByCityList: Array<RankingByCity> = responseList.map((response, index) => {
         return {
+            cityName: cityList[index].name,
             cityId: cityList[index].code,
             rankingList: response.data
         }

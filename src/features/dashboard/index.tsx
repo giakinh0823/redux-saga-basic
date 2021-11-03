@@ -17,13 +17,13 @@ import StudentRankingList from './components/StudentRankingList';
 
 const useStyles = makeStyles(() => ({
     root: {
-      position: 'relative',
-      paddingTop: "8px"
+        position: 'relative',
+        paddingTop: '8px',
     },
     loading: {
-      top: "0",
-      width: '100%',
-    }
+        top: '0',
+        width: '100%',
+    },
 }));
 
 export default function DashBoard() {
@@ -35,13 +35,6 @@ export default function DashBoard() {
     const lowStudentList = useAppSelector(selectLowStudentList);
     const rankingByCityList = useAppSelector(selectRankingByCityList);
 
-    console.log('DashBoard', loading, {
-        staticstics,
-        highestStudentList,
-        lowStudentList,
-        rankingByCityList,
-    });
-
     React.useEffect(() => {
         dispatch(dashboardActions.fetchData());
     }, [dispatch]);
@@ -49,7 +42,9 @@ export default function DashBoard() {
     return (
         <Box className={classes.root}>
             {/* loading */}
-            {loading && (<LinearProgress className={classes.loading} sx={{ position: 'absolute',}}/>)}
+            {loading && (
+                <LinearProgress className={classes.loading} sx={{ position: 'absolute' }} />
+            )}
             {/* staticstics */}
             <Grid container spacing={3}>
                 <Grid item xs={12} md={6} lg={3}>
@@ -83,19 +78,37 @@ export default function DashBoard() {
             </Grid>
             {/* all student ranking */}
             <Box mt={4}>
-              <Typography variant="h4" gutterBottom>ALl Students</Typography>
-              <Grid container spacing={3}>
-                <Grid item xs={12}  md={6} lg={4} xl={3}>
-                  <Widget title="Student width highest mark">
-                    <StudentRankingList students={highestStudentList}/>
-                  </Widget>
+                <Typography variant="h4" gutterBottom>
+                    ALl Students
+                </Typography>
+                <Grid container spacing={3}>
+                    <Grid item xs={12} md={6} lg={4} xl={3}>
+                        <Widget title="Student width highest mark">
+                            <StudentRankingList students={highestStudentList} />
+                        </Widget>
+                    </Grid>
+                    <Grid item xs={12} md={6} lg={4} xl={3}>
+                        <Widget title="Student width highest mark">
+                            <StudentRankingList students={lowStudentList} />
+                        </Widget>
+                    </Grid>
                 </Grid>
-                <Grid item xs={12}  md={6} lg={4} xl={3}>
-                  <Widget title="Student width highest mark">
-                  <StudentRankingList students={lowStudentList}/>
-                  </Widget>
+            </Box>
+
+            {/* ranking by city */}
+            <Box mt={4}>
+                <Typography variant="h4" gutterBottom>
+                    Ranking by city
+                </Typography>
+                <Grid container spacing={3}>
+                    {rankingByCityList.map((item, index) => (
+                        <Grid key={item.cityId} item xs={12} md={6} lg={4} xl={3}>
+                            <Widget title={item.cityName}>
+                                <StudentRankingList students={item.rankingList} />
+                            </Widget>
+                        </Grid>
+                    ))}
                 </Grid>
-              </Grid>
             </Box>
         </Box>
     );
