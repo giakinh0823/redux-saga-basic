@@ -5,18 +5,22 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { Student } from 'models';
+import { City, Student } from 'models';
 import * as React from 'react';
 import { capabilitiesString, getMarkColor } from 'utils';
 
 export interface StudentTableListListProps {
     students: Student[];
+    cityMap: {
+        [key: string]: City;
+    } 
     onEdit?: (student: Student) => void;
     onDelete?: (student: Student) => void;
 }
 
 export default function StudentTableList({
     students,
+    cityMap,
     onEdit,
     onDelete,
 }: StudentTableListListProps) {
@@ -47,7 +51,7 @@ export default function StudentTableList({
                                 <TableCell>
                                     <Box color={getMarkColor(student.mark)} fontWeight="bold">{student.mark}</Box>
                                 </TableCell>
-                                <TableCell>{student.city}</TableCell>
+                                <TableCell>{cityMap[student.city]?.name}</TableCell>
                                 <TableCell align="center">
                                     <Button
                                         size="small"

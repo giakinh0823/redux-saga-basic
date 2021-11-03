@@ -3,7 +3,8 @@ import { makeStyles } from '@mui/styles';
 import * as React from 'react';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import { studentActions, selectStudentList, selectStudentPagination, selectStudentFilter, selectStudentLoading } from '../studentSlice';
-import StudentTableList from '../components/StudentRankingList';
+import StudentTableList from '../components/StudentTableList';
+import { selectCityMap } from 'features/city/citySlice';
 
 const useStyles = makeStyles(() => ({
     root: {},
@@ -26,6 +27,7 @@ export default function ListPage() {
     const pagination = useAppSelector(selectStudentPagination);
     const filter = useAppSelector(selectStudentFilter);
     const loading = useAppSelector(selectStudentLoading);
+    const cityMap = useAppSelector(selectCityMap)
 
     React.useEffect(() => {
         dispatch(
@@ -48,7 +50,7 @@ export default function ListPage() {
             {/* StudentTable */}
             <Box mt={3} sx={{position: 'relative'}}>
                 {loading && <LinearProgress className={classes.loading} sx={{ position: 'absolute'}}/>}
-                <StudentTableList students={studentList} />
+                <StudentTableList students={studentList} cityMap={cityMap} />
             </Box>
 
             {/* Pagination */}

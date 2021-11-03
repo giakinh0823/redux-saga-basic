@@ -1,5 +1,5 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { City, ListResponse } from "models";
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { City, ListResponse } from 'models';
 import { RootState } from '../../app/store';
 
 export interface CityState {
@@ -10,10 +10,10 @@ export interface CityState {
 const initialState: CityState = {
     loading: false,
     list: [],
-}
+};
 
 const citySlice = createSlice({
-    name: "city",
+    name: 'city',
     initialState: initialState,
     reducers: {
         fetchCityList(state) {
@@ -22,18 +22,23 @@ const citySlice = createSlice({
         fetchCityListSuccess(state, action: PayloadAction<ListResponse<City>>) {
             state.list = action.payload.data;
             state.loading = false;
-        }, 
+        },
         fetchCityListFailed(state) {
             state.loading = false;
         },
-    }
+    },
 });
-
 
 //Actions
 export const cityActions = citySlice.actions;
 //Selectors
-export const citySelectors = (state: RootState) => state.city.list;
+export const selecCityList = (state: RootState) => state.city.list;
+export const selectCityMap = createSelector(selecCityList, (cityList) => 
+    cityList.reduce((map: { [key: string]: City }, city: City) => {
+        map[city.code] = city;
+        return map;
+    }, {})
+);
 
 //Reducers
 const cityReducer = citySlice.reducer;
