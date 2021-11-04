@@ -12,7 +12,8 @@ import {
 import StudentTableList from '../components/StudentTableList';
 import { selectCityList, selectCityMap } from 'features/city/citySlice';
 import StudentFilters from '../components/StudentFilters';
-import { ListParams } from 'models';
+import { ListParams, Student } from 'models';
+import studentApi from 'api/productApi';
 
 const useStyles = makeStyles(() => ({
     root: {},
@@ -50,9 +51,21 @@ export default function ListPage() {
         dispatch(studentActions.setFilterWithDebounce(newFilter));
     };
 
-    const hanleFIlterChange = (newFilter: ListParams) => {
+    const handleFIlterChange = (newFilter: ListParams) => {
         dispatch(studentActions.setFilter(newFilter));
     };
+
+    const handleDelete = async (student: Student) => {
+        try {
+            //remove student api
+            await studentApi.remove(student?.id || '');
+
+            //trigger to re-fetch student list with current filter
+            dispatch(studentActions.setFilter({...filter}));
+        } catch (error: any) {
+            console.log(error);
+        }
+    }
 
     return (
         <Box className={classes.root}>
@@ -68,7 +81,7 @@ export default function ListPage() {
                     filter={filter}
                     cityList={cityList}
                     onSearchChange={handleSearchChange}
-                    onChange={hanleFIlterChange}
+                    onChange={handleFIlterChange}
                 />
             </Box>
 
@@ -77,7 +90,7 @@ export default function ListPage() {
                 {loading && (
                     <LinearProgress className={classes.loading} sx={{ position: 'absolute' }} />
                 )}
-                <StudentTableList students={studentList} cityMap={cityMap} />
+                <StudentTableList students={studentList} cityMap={cityMap}  onDelete={handleDelete}/>
             </Box>
             {/* Pagination */}
             <Box mt={3} mb={3}>

@@ -16,11 +16,11 @@ const studentApi = {
     },
     remove(id: string): Promise<any> {
         const url = `/students/${id}`;
-        return axiosClient.get(url);
+        return axiosClient.delete(url);
     },
     update(data: Student): Promise<Student> {
         const url = `/students/${data.id}`;
-        return axiosClient.get(url, { data });
+        return axiosClient.patch(url, { data });
     },
 };
 
