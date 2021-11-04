@@ -1,19 +1,20 @@
-import { Box, Button, Pagination, Typography, LinearProgress } from '@mui/material';
+import { Box, Button, LinearProgress, Pagination, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import * as React from 'react';
-import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import {
-    studentActions,
-    selectStudentList,
-    selectStudentPagination,
-    selectStudentFilter,
-    selectStudentLoading,
-} from '../studentSlice';
-import StudentTableList from '../components/StudentTableList';
-import { selectCityList, selectCityMap } from 'features/city/citySlice';
-import StudentFilters from '../components/StudentFilters';
-import { ListParams, Student } from 'models';
 import studentApi from 'api/productApi';
+import { selectCityList, selectCityMap } from 'features/city/citySlice';
+import { ListParams, Student } from 'models';
+import * as React from 'react';
+import { Link, useHistory, useRouteMatch } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
+import StudentFilters from '../components/StudentFilters';
+import StudentTableList from '../components/StudentTableList';
+import {
+    selectStudentFilter,
+    selectStudentList,
+    selectStudentLoading,
+    selectStudentPagination,
+    studentActions,
+} from '../studentSlice';
 
 const useStyles = makeStyles(() => ({
     root: {},
@@ -30,6 +31,9 @@ const useStyles = makeStyles(() => ({
 }));
 
 export default function ListPage() {
+    const match = useRouteMatch();
+    const history = useHistory();
+
     const classes = useStyles();
     const dispatch = useAppDispatch();
     const studentList = useAppSelector(selectStudentList);
@@ -61,19 +65,25 @@ export default function ListPage() {
             await studentApi.remove(student?.id || '');
 
             //trigger to re-fetch student list with current filter
-            dispatch(studentActions.setFilter({...filter}));
+            dispatch(studentActions.setFilter({ ...filter }));
         } catch (error: any) {
             console.log(error);
         }
+    };
+
+    const handleEditStudent = async (student: Student) => {
+        history.push(`${match.url}/${student.id}`);
     }
 
     return (
         <Box className={classes.root}>
             <Box className={classes.titleContainer}>
                 <Typography variant="h4">Students</Typography>
-                <Button variant="contained" color="primary">
-                    Add New Student
-                </Button>
+                <Link to={`${match.url}/add`} style={{ textDecoration: 'none' }}>
+                    <Button variant="contained" color="primary">
+                        Add New Student
+                    </Button>
+                </Link>
             </Box>
             {/* filter  */}
             <Box mt={3}>
@@ -90,7 +100,12 @@ export default function ListPage() {
                 {loading && (
                     <LinearProgress className={classes.loading} sx={{ position: 'absolute' }} />
                 )}
-                <StudentTableList students={studentList} cityMap={cityMap}  onDelete={handleDelete}/>
+                <StudentTableList
+                    students={studentList}
+                    cityMap={cityMap}
+                    onDelete={handleDelete}
+                    onEdit={handleEditStudent}
+                />
             </Box>
             {/* Pagination */}
             <Box mt={3} mb={3}>

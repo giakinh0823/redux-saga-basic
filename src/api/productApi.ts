@@ -6,7 +6,7 @@ const studentApi = {
         const url = '/students';
         return axiosClient.get(url, { params });
     },
-    getById(id: number): Promise<Student> {
+    getById(id: string): Promise<Student> {
         const url = `/students/${id}`;
         return axiosClient.get(url);
     },
