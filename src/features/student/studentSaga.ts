@@ -2,7 +2,7 @@ import { PayloadAction } from "@reduxjs/toolkit";
 import { studentActions } from "./studentSlice";
 import { ListParams, ListResponse, Student } from 'models';
 import { call, debounce, put, takeLatest } from "redux-saga/effects";
-import studentApi from "api/productApi";
+import studentApi from "api/studentApi";
 
 
 

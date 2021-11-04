@@ -1,10 +1,11 @@
 import { Box, Button, LinearProgress, Pagination, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import studentApi from 'api/productApi';
+import studentApi from 'api/studentApi';
 import { selectCityList, selectCityMap } from 'features/city/citySlice';
 import { ListParams, Student } from 'models';
 import * as React from 'react';
 import { Link, useHistory, useRouteMatch } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { useAppDispatch, useAppSelector } from '../../../app/hooks';
 import StudentFilters from '../components/StudentFilters';
 import StudentTableList from '../components/StudentTableList';
@@ -63,7 +64,7 @@ export default function ListPage() {
         try {
             //remove student api
             await studentApi.remove(student?.id || '');
-
+            toast.success('Delete student successfully');
             //trigger to re-fetch student list with current filter
             dispatch(studentActions.setFilter({ ...filter }));
         } catch (error: any) {

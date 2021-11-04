@@ -1,7 +1,7 @@
 import { all, call, put, takeLatest } from 'redux-saga/effects';
 import { dashboardActions, RankingByCity } from './dashboardSlice';
 import { City, ListResponse, Student } from 'models';
-import studentApi from 'api/productApi';
+import studentApi from 'api/studentApi';
 import cityApi from 'api/cityApi';
 
 function* fetchStaticstics() {

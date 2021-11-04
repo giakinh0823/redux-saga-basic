@@ -1,12 +1,14 @@
 import { ChevronLeft } from '@mui/icons-material';
 import { Box, Typography } from '@mui/material';
-import studentApi from 'api/productApi';
+import studentApi from 'api/studentApi';
 import { Student } from 'models';
 import * as React from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useHistory, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import StudentForm from '../components/StudentForm';
 
 export default function AddEditPage() {
+    const history = useHistory();
     const params = useParams<{ studentId: string }>();
     const { studentId } = params;
     const isEdit = Boolean(studentId);
@@ -33,8 +35,18 @@ export default function AddEditPage() {
         ...student,
     } as Student;
 
-    const handleFormSubmit = (values: Student) => {
-      //todo: handle submit call api
+    const handleFormSubmit = async (values: Student) => {
+        //todo: handle submit call api
+        if(isEdit){
+            await studentApi.update(values);
+        }else{
+            await studentApi.add(values);
+        }
+
+        //toast success
+        toast.success('Save student successfully');
+        //Redirect
+        history.push('/admin/student');
     };
 
     return (
@@ -49,13 +61,11 @@ export default function AddEditPage() {
                     {!isEdit ? 'Add New Student' : 'Edit Student Info'}
                 </Typography>
             </Box>
-            {!isEdit ||
-                (Boolean(student) && (
+            {(!isEdit || Boolean(student)) && (
                     <Box mt={4}>
                         <StudentForm initalValues={initalValues} onSubmit={handleFormSubmit} />
                     </Box>
-                ))
-            }
+                )}
         </Box>
     );
 }
