@@ -3,8 +3,8 @@ import * as React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import './App.css';
 import LoginPage from './features/auth/pages/LoginPage';
-import { AdminLayout } from './components/layout';
-import { NotFound, PrivateRoute } from 'components/common';
+import { AdminLayout } from './components/Layout';
+import { NotFound, PrivateRoute } from 'components/Common';
 
 function App() {
     return (

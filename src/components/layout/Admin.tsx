@@ -1,7 +1,7 @@
 import { Box } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import * as React from 'react';
-import {Header, Sidebar} from '../common';
+import {Header, Sidebar} from '../Common';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
 import DashBoard from '../../features/dashboard';
 import StudentFeature from 'features/student';

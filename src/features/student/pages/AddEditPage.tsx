@@ -4,6 +4,7 @@ import studentApi from 'api/productApi';
 import { Student } from 'models';
 import * as React from 'react';
 import { Link, useParams } from 'react-router-dom';
+import StudentForm from '../components/StudentForm';
 
 export default function AddEditPage() {
     const params = useParams<{ studentId: string }>();
@@ -18,10 +19,23 @@ export default function AddEditPage() {
                 const response = await studentApi.getById(studentId);
                 setStudent(response);
             } catch (error) {
-              console.log(error);
+                console.log(error);
             }
         })();
     }, [studentId]);
+
+    const initalValues: Student = {
+        name: '',
+        age: 0,
+        mark: 0,
+        gender: 'male',
+        city: '',
+        ...student,
+    } as Student;
+
+    const handleFormSubmit = (values: Student) => {
+      //todo: handle submit call api
+    };
 
     return (
         <Box>
@@ -35,6 +49,13 @@ export default function AddEditPage() {
                     {!isEdit ? 'Add New Student' : 'Edit Student Info'}
                 </Typography>
             </Box>
+            {!isEdit ||
+                (Boolean(student) && (
+                    <Box mt={4}>
+                        <StudentForm initalValues={initalValues} onSubmit={handleFormSubmit} />
+                    </Box>
+                ))
+            }
         </Box>
     );
 }
